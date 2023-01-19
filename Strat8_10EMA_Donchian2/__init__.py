@@ -6,18 +6,22 @@ class Strat8_10EMA_Donchian2(Strategy):
 	# def before(self):
 	# 	self.log("------START OF CANDLE------")
 
-	def hyperparameters(self):
-		return [
-			{'name': 'donchian_period_h', 'type': int, 'min': 30, 'max': 210, 'default': 40},
-			{'name': 'lookback_verifying_h', 'type': int, 'min': 2, 'max': 30, 'default': 5},
-		]
+	# --- HYPERPARAMETERS ---
+
+	# def hyperparameters(self):
+	# 	return [
+	# 		{'name': 'donchian_period_h', 'type': int, 'min': 30, 'max': 210, 'default': 40},
+	# 		{'name': 'lookback_verifying_h', 'type': int, 'min': 2, 'max': 30, 'default': 5},
+	# 	]
+
+	# --- CUSTOM VARIABLES ---
 
 	def __init__(self):
 		super().__init__()
 
-		self.vars["donchian_period"] = 100 #self.hp['donchian_period_h']
+		self.vars["donchian_period"] = 100
 		self.vars["ema_min_volatility_distance"] = 0
-		self.vars["lookback_verifying"] = -30 #self.hp['lookback_verifying_h']
+		self.vars["lookback_verifying"] = -30
 
 	# --- INDICATORS ---
 
