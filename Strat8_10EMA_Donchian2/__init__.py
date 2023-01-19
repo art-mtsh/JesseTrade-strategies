@@ -164,6 +164,3 @@ class Strat8_10EMA_Donchian2(Strategy):
 	# 	self.log("")
 	#
 	# 	self.log("------END OF CANDLE------")
-
-
-# 9999
