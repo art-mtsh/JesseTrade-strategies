@@ -2,7 +2,11 @@ from jesse.strategies import Strategy, cached
 import jesse.indicators as ta
 from jesse import utils
 
+
 class ExampleStrategy(Strategy):
+    def before(self):
+        self.log(f"Current time is: {self.current_candle}")
+
     def should_long(self) -> bool:
         return False
 
