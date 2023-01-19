@@ -1,1 +1,3 @@
-# Description
+# Example stratedy
+
+empty starting strategy
