@@ -1,4 +1,4 @@
-# 10 EMA + Donchian UNBOUND
+# 10 EMA + Donchian REBOUND
 
 Стратегія відбою від Donchian на спадаючому/зростаючому ринку
 
