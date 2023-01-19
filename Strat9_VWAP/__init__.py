@@ -56,10 +56,10 @@ class Strat9_VWAP(Strategy):
 		entry = self.vwap[-1]
 
 		# 	StopLoss = 2x ATR
-		stop = entry - 2 * self.atr
+		stop = entry - 4 * self.atr[-1]
 
 		# 	TakeProfit = 2x ATR
-		profit_target = entry + 2 * self.atr
+		profit_target = entry + 7 * self.atr[-1]
 
 		# 	Quantity to buy, using 3% risk of total account balance
 		qty = utils.risk_to_qty(self.balance, 3, entry, stop, self.fee_rate)
@@ -78,10 +78,10 @@ class Strat9_VWAP(Strategy):
 		entry = self.vwap[-1]
 
 		# 	StopLoss = 2x ATR
-		stop = entry + 2 * self.atr
+		stop = entry + 4 * self.atr[-1]
 
 		# 	TakeProfit = 2x ATR
-		profit_target = entry - 2 * self.atr
+		profit_target = entry - 7 * self.atr[-1]
 
 		# 	Quantity to buy, using 3% risk of total account balance
 		qty = utils.risk_to_qty(self.balance, 3, entry, stop, self.fee_rate)
