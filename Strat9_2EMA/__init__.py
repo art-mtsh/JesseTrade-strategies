@@ -2,7 +2,7 @@ from jesse.strategies import Strategy, cached
 import jesse.indicators as ta
 from jesse import utils
 
-class Strat8_10EMA_Donchian2(Strategy):
+class Strat9_2EMA(Strategy):
 	# def before(self):
 	# 	self.log("------START OF CANDLE------")
 
