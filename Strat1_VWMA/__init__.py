@@ -5,6 +5,18 @@ from jesse import utils
 
 class Strat1_VWMA(Strategy):
 
+	# --- CUSTOM VARIABLES ---
+
+	def __init__(self):
+		super().__init__()
+
+		self.vars["max_vol_percent"] = 2
+		self.vars["min_vol_percent"] = 1
+		self.vars["rsi"] = 10
+		self.vars["lower_rsi"] = 25
+		self.vars["upper_rsi"] = 75
+		self.vars["atr_multiplyer"] = 2
+
 	# --- INDICATORS ---
 
 	@property
@@ -17,39 +29,48 @@ class Strat1_VWMA(Strategy):
 
 	@property
 	def rsi(self):
-		return ta.rsi(self.candles, 10)
+		return ta.rsi(self.candles, self.vars["rsi"])
 
 	# --- FILTERS ---
 
-	def up1(self):
+	def volatility_filter(self):
 		perc = abs((self.vwma1[-1] - self.vwma2[-1]) / (self.vwma1[-1] / 100))
-		return 2 > perc > 1
-
-	def up2(self):
-		return self.vwma1[-1] < self.vwma2[-1]
+		return self.vars["max_vol_percent"] > perc > self.vars["min_vol_percent"]
 
 	def filters(self):
-		return [self.up1, self.up2]
+		return [self.volatility_filter]
 
 	# --- ORDERS ---
 
 	def should_long(self) -> bool:
-		return self.rsi < 30
+		return self.vwma1[-1] > self.vwma2[-1] and self.rsi < self.vars["lower_rsi"]
 
 	def should_short(self) -> bool:
-		pass
+		return self.vwma1[-1] < self.vwma2[-1] and self.rsi < self.vars["upper_rsi"]
 
 	def should_cancel_entry(self) -> bool:
 		return False
 
 	def go_long(self):
-		qty = utils.size_to_qty(self.balance * 2, self.price, fee_rate=self.fee_rate)
-		self.buy = qty, self.price
+		entry = self.price
+		stop = entry - self.vars["atr_multiplyer"] * ta.atr(self.candles)
+		profit_target = entry + self.vars["atr_multiplyer"] * ta.atr(self.candles)
+		qty = utils.risk_to_qty(self.balance, 3, entry, stop, self.fee_rate)
+		self.buy = qty, entry
+		self.stop_loss = qty, stop
+		self.take_profit = qty, profit_target
 
 	def go_short(self):
-		pass
+		entry = self.price
+		stop = entry + self.vars["atr_multiplyer"] * ta.atr(self.candles)
+		profit_target = entry - self.vars["atr_multiplyer"] * ta.atr(self.candles)
+		qty = utils.risk_to_qty(self.balance, 3, entry, stop, self.fee_rate)
+		self.sell = qty, entry
+		self.stop_loss = qty, stop
+		self.take_profit = qty, profit_target
 
 	def update_position(self):
-		if self.is_long:
-			if self.rsi > 70:
-				self.liquidate()
+		if self.is_long and self.rsi > self.vars["upper_rsi"]:
+			self.liquidate()
+		elif self.is_short and self.rsi < self.vars["lower_rsi"]:
+			self.liquidate()
