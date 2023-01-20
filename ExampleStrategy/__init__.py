@@ -5,7 +5,7 @@ from jesse import utils
 
 class ExampleStrategy(Strategy):
     def before(self):
-        self.log(f"Current time is: {self.current_candle}")
+        self.log(f"Linregangle: {ta.linearreg_angle(self.candles, period = 14, source_type = 'close', sequential=False)}")
 
     def should_long(self) -> bool:
         return False
