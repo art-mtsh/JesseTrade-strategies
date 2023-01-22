@@ -2,7 +2,7 @@ from jesse.strategies import Strategy, cached
 import jesse.indicators as ta
 from jesse import utils
 
-class Strat10_LinRegAngle_2EMA(Strategy):
+class Strat10_RegAngle_2EMA_wPr(Strategy):
 
 	# --- HYPERPARAMETERS ---
 
@@ -19,20 +19,19 @@ class Strat10_LinRegAngle_2EMA(Strategy):
 	def __init__(self):
 		super().__init__()
 
-		# self.vars["lingerangle_period"] = 15 # self.hp['lingerangle_period_h']
+		self.vars["lingerangle_period"] = 15 # self.hp['lingerangle_period_h']
 		self.vars["willr_period"] = 20  # self.hp['lingerangle_period_h']
 		self.vars["ema_1_period"] = 200 # self.hp['ema_1_period_h']
 		self.vars["ema_2_period"] = 300 # self.hp['ema_2_period_h']
-		# self.vars["lingerangle_filter"] = 0.085 # self.hp['lingerangle_filter_h']
+		self.vars["lingerangle_filter"] = 0.085 # self.hp['lingerangle_filter_h']
 		self.vars["willr_filter"] = 10  # self.hp['lingerangle_filter_h']
 		self.vars["atr_period"] = 50
 
 	# --- INDICATORS ---
 
-	# @property
-	# def lingerangle(self):
-	# 	return ta.linearreg_angle(self.candles, period = self.vars["lingerangle_period"], source_type = "close", sequential=True)
-
+	@property
+	def lingerangle(self):
+		return ta.linearreg_angle(self.candles, period = self.vars["lingerangle_period"], source_type = "close", sequential=True)
 	@property
 	def willr(self):
 		return ta.willr(self.candles, period = self.vars["willr_period"], sequential=True)
@@ -138,8 +137,3 @@ class Strat10_LinRegAngle_2EMA(Strategy):
 
 		# 	TakeProfit setting
 		self.take_profit = qty, profit_target
-
-	# def after(self):
-	# 	self.log(f"Linreganle: {self.lingerangle[-1]}")
-	# 	self.log(f"Ema 400: {self.ema_1[-1]}")
-	# 	self.log(f"Ema 600: {self.ema_2[-1]}")
