@@ -1,3 +1,4 @@
+![1674408312199](https://user-images.githubusercontent.com/108072766/213930434-6e7ec5f6-f4d0-44ea-a77b-ae5a1badf24d.jpg)
 
 # 2 EMA
 # ПРАЦЮЄ!!!!!
