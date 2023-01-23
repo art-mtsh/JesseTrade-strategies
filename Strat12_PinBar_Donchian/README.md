@@ -6,6 +6,5 @@
 Тест на 6 монетах показав хороше Еквіті
 з просадкою до 9 % та 14.87% прибутку на місяць
 
-
-![Equity](https://user-images.githubusercontent.com/108072766/214139380-c263ea6d-e049-4ec3-98cc-20d79b85ae90.jpg)
-![Cryptos](https://user-images.githubusercontent.com/108072766/214139379-139b1f12-9ab4-420f-aabe-8d161caab3f7.jpg)
+![Cryptos](https://user-images.githubusercontent.com/108072766/214139740-ae18dcea-64ab-4964-9be4-f1b0a6b9e591.jpg)
+![Equity](https://user-images.githubusercontent.com/108072766/214139744-e08dc884-752f-4f7b-8aee-aad70bd735b1.jpg)
