@@ -86,7 +86,7 @@ class Strat12_PinBar_Donchian(Strategy):
 		profit_target1 = entry + 2 * abs(entry - stop)
 
 		# 	Quantity to buy, using 3% risk of total account balance
-		qty = utils.risk_to_qty(self.balance, 3, entry, stop, self.fee_rate)
+		qty = utils.risk_to_qty(self.balance, 30, entry, stop, self.fee_rate)
 
 		# 	Buy action
 		self.buy = qty, entry
@@ -112,7 +112,7 @@ class Strat12_PinBar_Donchian(Strategy):
 		profit_target1 = entry - 2 * abs(entry - stop)
 
 		# 	Quantity to buy, using 3% risk of total account balance
-		qty = utils.risk_to_qty(self.balance, 3, entry, stop, self.fee_rate)
+		qty = utils.risk_to_qty(self.balance, 30, entry, stop, self.fee_rate)
 
 		# 	Buy action
 		self.sell = qty, entry
