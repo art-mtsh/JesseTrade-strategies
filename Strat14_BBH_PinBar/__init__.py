@@ -12,6 +12,14 @@ class Strat14_BBH(Strategy):
 
 	# --- HYPERPARAMETERS ---
 
+	# def hyperparameters(self):
+	# 	return [
+	# 		{'name': 'taillong_min_h', 'type': int, 'min': 0, 'max': 0.02, 'default': 0.01},
+	# 		{'name': 'taillong_max_h', 'type': int, 'min': 0.02, 'max': 0.05, 'default': 0.03},
+	# 		{'name': 'tail_h', 'type': int, 'min': 2, 'max': 8, 'default': 5},
+	# 		{'name': 'body_position_h', 'type': int, 'min': 2, 'max': 6, 'default': 4},
+	# 	]
+
 	# --- CUSTOM VARIABLES ---
 
 	def __init__(self):
