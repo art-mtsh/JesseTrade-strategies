@@ -8,19 +8,19 @@ from jesse import utils
 
 '''
 
-class Strat122(Strategy):
+class Strat14_CleanPinBar(Strategy):
 
 	# --- HYPERPARAMETERS ---
 
-	def hyperparameters(self):
-		return [
-			{'name': 'donch_per_h', 'type': int, 'min': 7, 'max': 9, 'default': 8},
-			{'name': 'atr_per_h', 'type': int, 'min': 47, 'max': 49, 'default': 48},
-			{'name': 'tail_h', 'type': int, 'min': 5, 'max': 7, 'default': 6},
-			{'name': 'taillong_min_h', 'type': int, 'min': 0, 'max': 1, 'default': 0},
-			{'name': 'taillong_max_h', 'type': int, 'min': 4, 'max': 6, 'default': 5},
-			{'name': 'body_position_h', 'type': int, 'min': 3, 'max': 5, 'default': 4},
-		]
+	# def hyperparameters(self):
+	# 	return [
+			# {'name': 'donch_per_h', 'type': int, 'min': 7, 'max': 9, 'default': 8},
+			# {'name': 'atr_per_h', 'type': int, 'min': 47, 'max': 49, 'default': 48},
+			# {'name': 'tail_h', 'type': int, 'min': 5, 'max': 7, 'default': 6},
+			# {'name': 'taillong_min_h', 'type': int, 'min': 0, 'max': 1, 'default': 0}
+			# {'name': 'taillong_max_h', 'type': int, 'min': 4, 'max': 6, 'default': 5},
+			# {'name': 'body_position_h', 'type': int, 'min': 3, 'max': 5, 'default': 4},
+		# ]
 
 	# --- CUSTOM VARIABLES ---
 
@@ -28,17 +28,11 @@ class Strat122(Strategy):
 		super().__init__()
 
 		# період Дончіана
-		self.vars["donch_per"] = self.hp['donch_per_h']
-		# період ATR
-		self.vars["atr_per"] = self.hp['atr_per_h']
+		self.vars["donch_per"] = 8 # self.hp['donch_per_h']
 		# тіло до хвоста
-		self.vars["tail"] = self.hp['tail_h']
-		# мінімальний рендж в ATR
-		self.vars["taillong_min"] = self.hp['taillong_min_h']
-		# максимальний рендж в ATR
-		self.vars["taillong_max"] = self.hp['taillong_max_h']
+		self.vars["tail"] = 6 # self.hp['tail_h']
 		# наскільки близько до краю має бути тіло
-		self.vars["body_position"] = self.hp['body_position_h']
+		self.vars["body_position"] =  4 # self.hp['body_position_h']
 
 	# --- INDICATORS ---
 
@@ -46,26 +40,15 @@ class Strat122(Strategy):
 	def donchianIndi(self):
 		return ta.donchian(self.candles[:-1], period=self.vars["donch_per"], sequential=True)
 
-	@property
-	def atrIndi(self):
-		return ta.atr(self.candles[:-1], period=self.vars["atr_per"], sequential=True)
-
 	# --- FILTERS ---
 
 	# Наскільки хвіст має бути більшим з тіло
 	def tail(self):
 		return abs(self.high - self.low) > self.vars["tail"] * abs(self.open - self.close)
-	# Обмеження мінімального і максимального ренджа від high До low у %
-	def taillong(self):
-		return self.atrIndi[-1] * self.vars["taillong_max"] >= abs(self.high - self.low) >= \
-			   self.atrIndi[-1] * self.vars["taillong_min"]
-	# Порівняння об'єму поточного бару і попереднього
-	def volumefilter(self):
-		candles_volume = self.candles[:, 5]
-		return candles_volume[0] > candles_volume[-1] and candles_volume[0] > candles_volume[-2]
+
 	# Сума усіх фільтрів
 	def filters(self):
-		return [self.tail, self.taillong]
+		return [self.tail]
 
 	# --- DECISION MAKING ---
 
@@ -89,7 +72,6 @@ class Strat122(Strategy):
 
 		# 	StopLoss
 		stop = self.low - self.low * 0.001
-			# self.donchianIndi.lowerband[-1]
 
 		# 	TakeProfit 1/1
 		profit_target1 = entry + 2 * abs(entry - stop)
@@ -115,7 +97,6 @@ class Strat122(Strategy):
 
 		# 	StopLoss
 		stop = self.high + self.high * 0.001
-			# self.donchianIndi.upperband[-1]
 
 		# 	TakeProfit 1/1
 		profit_target1 = entry - 2 * abs(entry - stop)
