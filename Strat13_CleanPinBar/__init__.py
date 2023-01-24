@@ -3,22 +3,24 @@ import jesse.indicators as ta
 from jesse import utils
 
 '''
-Стратегія на Н1, що базується на BBH,
+Стратегія на Н1, що базується на пінбарах,
 які фільтруються по медіанному Дончіану та об'ємах
 
 '''
 
-class Strat12_PinBar_Donchian(Strategy):
+class Strat13_CleanPinBar(Strategy):
 
 	# --- HYPERPARAMETERS ---
 
 	# def hyperparameters(self):
 	# 	return [
-	# 		{'name': 'taillong_min_h', 'type': int, 'min': 0, 'max': 0.02, 'default': 0.01},
-	# 		{'name': 'taillong_max_h', 'type': int, 'min': 0.02, 'max': 0.05, 'default': 0.03},
-	# 		{'name': 'tail_h', 'type': int, 'min': 2, 'max': 8, 'default': 5},
-	# 		{'name': 'body_position_h', 'type': int, 'min': 2, 'max': 6, 'default': 4},
-	# 	]
+			# {'name': 'donch_per_h', 'type': int, 'min': 7, 'max': 9, 'default': 8},
+			# {'name': 'atr_per_h', 'type': int, 'min': 47, 'max': 49, 'default': 48},
+			# {'name': 'tail_h', 'type': int, 'min': 5, 'max': 7, 'default': 6},
+			# {'name': 'taillong_min_h', 'type': int, 'min': 0, 'max': 1, 'default': 0}
+			# {'name': 'taillong_max_h', 'type': int, 'min': 4, 'max': 6, 'default': 5},
+			# {'name': 'body_position_h', 'type': int, 'min': 3, 'max': 5, 'default': 4},
+		# ]
 
 	# --- CUSTOM VARIABLES ---
 
@@ -26,15 +28,11 @@ class Strat12_PinBar_Donchian(Strategy):
 		super().__init__()
 
 		# період Дончіана
-		self.vars["donch_per"] = 8  # self.hp['tail_h']
+		self.vars["donch_per"] = 8 # self.hp['donch_per_h']
 		# тіло до хвоста
 		self.vars["tail"] = 6 # self.hp['tail_h']
-		# мінімальний рендж
-		self.vars["taillong_min"] = 0.01 # self.hp['taillong_min_h']
-		# максимальний рендж
-		self.vars["taillong_max"] = 1 # self.hp['taillong_max_h']
 		# наскільки близько до краю має бути тіло
-		self.vars["body_position"] = 4 # self.hp['body_position_h']
+		self.vars["body_position"] =  4 # self.hp['body_position_h']
 
 	# --- INDICATORS ---
 
@@ -47,16 +45,10 @@ class Strat12_PinBar_Donchian(Strategy):
 	# Наскільки хвіст має бути більшим з тіло
 	def tail(self):
 		return abs(self.high - self.low) > self.vars["tail"] * abs(self.open - self.close)
-	# Обмеження мінімального і максимального ренджа від high До low у %
-	def taillong(self):
-		return self.close * self.vars["taillong_max"] >= abs(self.high - self.low) >= self.close * self.vars["taillong_min"]
-	# Порівняння об'єму поточного бару і попереднього
-	def volumefilter(self):
-		candles_volume = self.candles[:, 5]
-		return candles_volume[0] > candles_volume[-1] and candles_volume[0] > candles_volume[-2]
+
 	# Сума усіх фільтрів
 	def filters(self):
-		return [self.tail, self.taillong]
+		return [self.tail]
 
 	# --- DECISION MAKING ---
 
@@ -80,7 +72,6 @@ class Strat12_PinBar_Donchian(Strategy):
 
 		# 	StopLoss
 		stop = self.low - self.low * 0.001
-			# self.donchianIndi.lowerband[-1]
 
 		# 	TakeProfit 1/1
 		profit_target1 = entry + 2 * abs(entry - stop)
@@ -106,7 +97,6 @@ class Strat12_PinBar_Donchian(Strategy):
 
 		# 	StopLoss
 		stop = self.high + self.high * 0.001
-			# self.donchianIndi.upperband[-1]
 
 		# 	TakeProfit 1/1
 		profit_target1 = entry - 2 * abs(entry - stop)
