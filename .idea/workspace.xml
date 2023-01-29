@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4f50c29d-e7df-4739-8226-58c067ddedc9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Strat4_10EMA_overRSI/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Strat15_CleanC_RSI/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Strat16_ThreeRails/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Strat16_ThreeRailsREVERSE/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ExampleStrategy/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExampleStrategy/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat4_EMAVolatility_RSI/__init__.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +27,13 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Language Defaults" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="W:\Jesse Trade\strategies" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="sololearn 1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
