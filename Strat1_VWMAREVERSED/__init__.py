@@ -3,7 +3,7 @@ import jesse.indicators as ta
 from jesse import utils
 
 
-class Strat1_VWMA(Strategy):
+class Strat1_VWMAREVERSED(Strategy):
 
 	# --- CUSTOM VARIABLES ---
 
@@ -45,12 +45,14 @@ class Strat1_VWMA(Strategy):
 	# --- ORDERS ---
 
 	def should_long(self) -> bool:
+		return self.high < self.vwma1 < self.vwma2 and \
+			   self.rsi > self.vars["upper_rsi"]
+
+	def should_short(self) -> bool:
 		return self.low > self.vwma1 > self.vwma2 and \
 			   self.rsi < self.vars["lower_rsi"]
 
-	def should_short(self) -> bool:
-		return self.high < self.vwma1 < self.vwma2 and \
-			   self.rsi > self.vars["upper_rsi"]
+
 
 	def should_cancel_entry(self) -> bool:
 		return False
