@@ -2,6 +2,16 @@ from jesse.strategies import Strategy, cached
 import jesse.indicators as ta
 from jesse import utils
 
+'''
+Короче класика:
+фільтр тренду - три ЕМА
+decision maker - RSI
+
+проблема як завжди:
+- якщо мало трейдів, то мала вибірка і форвард тест провалюється
+- якщо багато трейдів, то комісія все від'їдає
+
+'''
 
 class Strat1_VWMA(Strategy):
 
@@ -10,38 +20,46 @@ class Strat1_VWMA(Strategy):
 	def __init__(self):
 		super().__init__()
 
-		# Швидка EMA
-		self.vars["fast_vwma"] = 60
-		# Повільна EMA
-		self.vars["slow_vwma"] = 180
+		# MA1
+		self.vars["ma1"] = 60
+		# MA2
+		self.vars["ma2"] = 150
+		# MA3
+		self.vars["ma3"] = 180
+
 		# Risk/Reward
 		self.vars["RR"] = 1
 		# RSI period
 		self.vars["rsi"] = 5
-		# Last bar range
-		self.vars["vol_filter"] = 0.5
 		# MIN border RSI
 		self.vars["lower_rsi"] = 30
 		# MAX border RSI
 		self.vars["upper_rsi"] = 70
+
+		# Last bar range
+		self.vars["vol_filter"] = 0.7
 		# ATR multiplier
-		self.vars["atr_multiplyer"] = 5
+		self.vars["atr_multiplyer"] = 2
+
 		# Start balance
 		self.vars["start_bal"] = 100
 
-
-		self.vars["REVERSE"] = 2
-
+		# reverse? 1=no, 2=yes
+		self.vars["REVERSE"] = 1
 
 	# --- INDICATORS ---
 
 	@property
-	def vwma1(self):
-		return ta.ema(self.candles, self.vars["fast_vwma"])
+	def ma1(self):
+		return ta.wma(self.candles, self.vars["ma1"])
 
 	@property
-	def vwma2(self):
-		return ta.ema(self.candles, self.vars["slow_vwma"])
+	def ma2(self):
+		return ta.wma(self.candles, self.vars["ma2"])
+
+	@property
+	def ma3(self):
+		return ta.wma(self.candles, self.vars["ma3"])
 
 	@property
 	def rsi(self):
@@ -62,16 +80,16 @@ class Strat1_VWMA(Strategy):
 	def should_long(self) -> bool:
 
 		if self.vars["REVERSE"] == 1:
-			return self.low > self.vwma1 > self.vwma2 and self.rsi < self.vars["lower_rsi"]
+			return self.low > self.ma1 > self.ma2 > self.ma3 and self.rsi < self.vars["lower_rsi"]
 		else:
-			return self.high < self.vwma1 < self.vwma2 and self.rsi > self.vars["upper_rsi"]
+			return self.high < self.ma1 < self.ma2 < self.ma3 and self.rsi > self.vars["upper_rsi"]
 
 	def should_short(self) -> bool:
 
 		if self.vars["REVERSE"] == 1:
-			return self.high < self.vwma1 < self.vwma2 and self.rsi > self.vars["upper_rsi"]
+			return self.high < self.ma1 < self.ma2 < self.ma3 and self.rsi > self.vars["upper_rsi"]
 		else:
-			return self.low > self.vwma1 > self.vwma2 and self.rsi < self.vars["lower_rsi"]
+			return self.low > self.ma1 > self.ma2 > self.ma3 and self.rsi < self.vars["lower_rsi"]
 
 	def should_cancel_entry(self) -> bool:
 		return False

@@ -1,19 +1,48 @@
-# Стратегія VWMA
+# Стратегія VWMA + RSI
 
-Дві VWMA як фільтр і RSI як сигнал для входу.
+Короче класика:
+фільтр тренду - три ЕМА
+decision maker - RSI
 
-ATR як ТП/СЛ, або динамічний вихад по протилежному RSI
+проблема як завжди:
+- якщо мало трейдів, то мала вибірка і форвард тест провалюється
+- якщо багато трейдів, то комісія все від'їдає
 
-Тести проводились на М5 та М15
+Тести проводились на Н1, М15, М15, М1
 
-def __init__(self):
-  super().__init__()
+В найкращому випадку це 0 з комісією.
 
-  self.vars["max_vol_percent"] = 2
-  self.vars["min_vol_percent"] = 1
-  self.vars["rsi"] = 10
-  self.vars["lower_rsi"] = 25
-  self.vars["upper_rsi"] = 75
-  self.vars["atr_multiplyer"] = 2
+Форвард при цьому провалюється.
 
-![res](https://user-images.githubusercontent.com/108072766/213503555-d29cbe73-4b12-44b1-bcd7-24f71da17448.jpg)
+Результат 12 інструментів на М5:
+
+![img.png](img.png)
+
+При параметрах
+
+    # MA1
+    self.vars["ma1"] = 60
+    # MA2
+    self.vars["ma2"] = 150
+    # MA3
+    self.vars["ma3"] = 180
+
+    # Risk/Reward
+    self.vars["RR"] = 1
+    # RSI period
+    self.vars["rsi"] = 5
+    # MIN border RSI
+    self.vars["lower_rsi"] = 30
+    # MAX border RSI
+    self.vars["upper_rsi"] = 70
+
+    # Last bar range
+    self.vars["vol_filter"] = 0.7
+    # ATR multiplier
+    self.vars["atr_multiplyer"] = 2
+
+    # Start balance
+    self.vars["start_bal"] = 100
+
+    # reverse? 1=no, 2=yes
+    self.vars["REVERSE"] = 1
