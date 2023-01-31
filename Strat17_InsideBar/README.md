@@ -11,28 +11,30 @@
 
 Тести проводились на Н1, М30, М15, М5.
 
+Чим не задовільняє: занадто мало входів на місяць, навіть якщо взяти 12 інструментів.
+
 Найкращий результат за пів року на М30:
 
 ![Result](https://user-images.githubusercontent.com/108072766/215754311-3d4ae17c-a146-42f0-878e-67052f54a3d0.jpg)
 
 З такими параметрами:
 
-body/shadow ratio:
+**body/shadow ratio:**
 
 self.vars["bsRatio"] = 50
 
-Risk/Reward:
+**Risk/Reward:**
 
 self.vars["RR"] = 1
 
-Size of bar inside:
+**Size of bar inside:**
 
 self.vars["inb"] = 0.9
 
-Start balance:
+**Start balance:**
 
 self.vars["sb"] = 1000
 
-Straight trading / reverse trading:
+**Straight trading / reverse trading:**
 
 self.vars["main"] = 1
