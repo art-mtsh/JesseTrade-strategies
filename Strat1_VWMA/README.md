@@ -16,7 +16,8 @@ decision maker - RSI
 
 Результат 12 інструментів на М5:
 
-![img.png](img.png)
+![img](https://user-images.githubusercontent.com/108072766/215852190-3d0d4609-63e1-4579-9485-dab5e5375990.png)
+
 
 При параметрах
 
