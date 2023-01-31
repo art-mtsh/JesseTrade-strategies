@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4f50c29d-e7df-4739-8226-58c067ddedc9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Strat17_InsideBar/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Strat1_VWMA/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat1_VWMA/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Strat1_VWMAREVERSED/__init__.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +38,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="W:\Jesse Trade\strategies\Strat17_InsideBar" />
       <recent name="W:\Jesse Trade\strategies" />
     </key>
   </component>

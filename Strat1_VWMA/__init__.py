@@ -10,14 +10,28 @@ class Strat1_VWMA(Strategy):
 	def __init__(self):
 		super().__init__()
 
+		# Швидка EMA
 		self.vars["fast_vwma"] = 60
+		# Повільна EMA
 		self.vars["slow_vwma"] = 180
+		# Risk/Reward
 		self.vars["RR"] = 1
+		# RSI period
 		self.vars["rsi"] = 5
+		# Last bar range
+		self.vars["vol_filter"] = 0.5
+		# MIN border RSI
 		self.vars["lower_rsi"] = 30
+		# MAX border RSI
 		self.vars["upper_rsi"] = 70
+		# ATR multiplier
 		self.vars["atr_multiplyer"] = 5
+		# Start balance
 		self.vars["start_bal"] = 100
+
+
+		self.vars["REVERSE"] = 2
+
 
 	# --- INDICATORS ---
 
@@ -37,7 +51,7 @@ class Strat1_VWMA(Strategy):
 
 	# фільтр ренджу останнього бару
 	def percent(self):
-		return (self.vars["atr_multiplyer"] * ta.atr(self.candles, 100)) / (self.close / 100) > 0.5
+		return (self.vars["atr_multiplyer"] * ta.atr(self.candles, 100)) / (self.close / 100) > self.vars["vol_filter"]
 
 	# сума всіх фільтрів
 	def filters(self):
@@ -46,24 +60,32 @@ class Strat1_VWMA(Strategy):
 	# --- ORDERS ---
 
 	def should_long(self) -> bool:
-		return self.low > self.vwma1 > self.vwma2 and \
-			   self.rsi < self.vars["lower_rsi"]
+
+		if self.vars["REVERSE"] == 1:
+			return self.low > self.vwma1 > self.vwma2 and self.rsi < self.vars["lower_rsi"]
+		else:
+			return self.high < self.vwma1 < self.vwma2 and self.rsi > self.vars["upper_rsi"]
 
 	def should_short(self) -> bool:
-		return self.high < self.vwma1 < self.vwma2 and \
-			   self.rsi > self.vars["upper_rsi"]
+
+		if self.vars["REVERSE"] == 1:
+			return self.high < self.vwma1 < self.vwma2 and self.rsi > self.vars["upper_rsi"]
+		else:
+			return self.low > self.vwma1 > self.vwma2 and self.rsi < self.vars["lower_rsi"]
 
 	def should_cancel_entry(self) -> bool:
 		return False
 
 	def go_long(self):
-		entry = self.close
+		if self.vars["REVERSE"] == 1:
+			entry = self.close
+			stop = entry - self.vars["atr_multiplyer"] * ta.atr(self.candles, 100)
+			profit_target = entry + self.vars["RR"] * abs(entry - stop)
 
-		# 	StopLoss
-		stop = entry - self.vars["atr_multiplyer"] * ta.atr(self.candles, 100)
-
-		# 	TakeProfit
-		profit_target = entry + self.vars["RR"] * abs(entry - stop)
+		else:
+			entry = self.close
+			stop = entry - self.vars["atr_multiplyer"] * ta.atr(self.candles, 100)
+			profit_target = entry + self.vars["RR"] * abs(entry - stop)
 
 		# StopLoss percent
 		slPercent = abs(stop - entry) / (self.close / 100)
@@ -81,13 +103,15 @@ class Strat1_VWMA(Strategy):
 		self.take_profit = qty, profit_target
 
 	def go_short(self):
-		entry = self.close
+		if self.vars["REVERSE"] == 1:
+			entry = self.close
+			stop = entry + self.vars["atr_multiplyer"] * ta.atr(self.candles, 100)
+			profit_target = entry - self.vars["RR"] * abs(entry - stop)
+		else:
+			entry = self.close
+			stop = entry + self.vars["atr_multiplyer"] * ta.atr(self.candles, 100)
+			profit_target = entry - self.vars["RR"] * abs(entry - stop)
 
-		# 	StopLoss
-		stop = entry + self.vars["atr_multiplyer"] * ta.atr(self.candles, 100)
-
-		# 	TakeProfit
-		profit_target = entry - self.vars["RR"] * abs(entry - stop)
 
 		# StopLoss percent
 		slPercent = abs(stop - entry) / (self.close / 100)
@@ -103,9 +127,3 @@ class Strat1_VWMA(Strategy):
 
 		# 	TakeProfit setting
 		self.take_profit = qty, profit_target
-
-# def update_position(self):
-# 	if self.is_long and self.rsi > self.vars["upper_rsi"]:
-# 		self.liquidate()
-# 	elif self.is_short and self.rsi < self.vars["lower_rsi"]:
-# 		self.liquidate()
