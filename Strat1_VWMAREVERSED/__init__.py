@@ -16,17 +16,18 @@ class Strat1_VWMAREVERSED(Strategy):
 		self.vars["rsi"] = 5
 		self.vars["lower_rsi"] = 30
 		self.vars["upper_rsi"] = 70
-		self.vars["atr_multiplyer"] = 1
+		self.vars["atr_multiplyer"] = 5
+		self.vars["start_bal"] = 100
 
 	# --- INDICATORS ---
 
 	@property
 	def vwma1(self):
-		return ta.vwma(self.candles, self.vars["fast_vwma"])
+		return ta.ema(self.candles, self.vars["fast_vwma"])
 
 	@property
 	def vwma2(self):
-		return ta.vwma(self.candles, self.vars["slow_vwma"])
+		return ta.ema(self.candles, self.vars["slow_vwma"])
 
 	@property
 	def rsi(self):
@@ -70,7 +71,7 @@ class Strat1_VWMAREVERSED(Strategy):
 		slPercent = abs(stop - entry) / (self.close / 100)
 
 		# 	Quantity to buy
-		qty = (1000 / slPercent) / self.close
+		qty = (self.vars["start_bal"] / slPercent) / self.close
 
 		# 	Buy action
 		self.buy = qty, entry
@@ -94,7 +95,7 @@ class Strat1_VWMAREVERSED(Strategy):
 		slPercent = abs(stop - entry) / (self.close / 100)
 
 		# 	Quantity to buy
-		qty = (1000 / slPercent) / self.close
+		qty = (self.vars["start_bal"] / slPercent) / self.close
 
 		# 	Buy action
 		self.sell = qty, entry

@@ -23,15 +23,21 @@ class Strat15_CleanC_RSI(Strategy):
 		# період RSI
 		self.vars["rsi_period"] = 10
 		# RSI min
-		self.vars["rsi_min"] = 30
+		self.vars["rsi_min"] = 35
 		# RSI max
-		self.vars["rsi_max"] = 70
-		# Risk/Reward
-		self.vars["RR"] = 2
+		self.vars["rsi_max"] = 65
+
 		# CleanChart candles quantity
 		self.vars["cc_quantity"] = 11
 		# CleanChart filter
 		self.vars["cc_filter"] = 2.5
+
+		# Start balance
+		self.vars["start_bal"] = 100
+		# Risk/Reward
+		self.vars["RR"] = 1
+		# ATR Multiplyer for StopLoss
+		self.vars["atr_multiplyer"] = 2
 
 	# --- INDICATORS ---
 
@@ -41,7 +47,7 @@ class Strat15_CleanC_RSI(Strategy):
 
 	@property
 	def atr0(self):
-		return ta.atr(self.candles, 100, sequential=True)
+		return ta.atr(self.candles, 100)
 
 	# --- FILTERS ---
 
@@ -79,7 +85,7 @@ class Strat15_CleanC_RSI(Strategy):
 		return current_body_range_perc > 70 and prev_body_range_perc > 70
 	# фільтр ренджу останнього бару до 3 ATR
 	def midRange(self):
-		return abs(self.high - self.low) <= 3 * self.atr0[-1]
+		return ((self.high + self.vars["atr_multiplyer"] * self.atr0) - (self.low - self.low * 0.001)) / (self.close / 100) > 0.5
 	# сума всіх фільтрів
 	def filters(self):
 		return [self.cleanChart, self.midRange, self.bodyShadow70]
@@ -101,18 +107,16 @@ class Strat15_CleanC_RSI(Strategy):
 		entry = self.high + self.high * 0.001
 
 		# 	StopLoss
-		stop = self.low - self.atr0[-1]
+		stop = self.low - self.vars["atr_multiplyer"] * self.atr0
 
 		# 	TakeProfit
 		profit_target = entry + self.vars["RR"] * abs(entry - stop)
 
-		# 	Quantity to buy, using 3% risk of total account balance
-		qty = utils.risk_to_qty(capital = 3000,
-								risk_per_capital = 100,
-								entry_price = entry,
-								stop_loss_price = stop,
-								precision = 5,
-								fee_rate = self.fee_rate)
+		# StopLoss percent
+		slPercent = abs(stop - entry) / (self.close / 100)
+
+		# 	Quantity to buy
+		qty = (self.vars["start_bal"] / slPercent) / self.close
 
 		# 	Buy action
 		self.buy = qty, entry
@@ -127,18 +131,16 @@ class Strat15_CleanC_RSI(Strategy):
 		entry = self.low - self.low * 0.001
 
 		# 	StopLoss
-		stop = self.high + self.atr0[-1]
+		stop = self.high + self.vars["atr_multiplyer"] * self.atr0
 
 		# 	TakeProfit
 		profit_target = entry - self.vars["RR"] * abs(stop - entry)
 
-		# 	Quantity to buy, using 3% risk of total account balance
-		qty = utils.risk_to_qty(capital = 3000,
-								risk_per_capital = 100,
-								entry_price = entry,
-								stop_loss_price = stop,
-								precision = 5,
-								fee_rate = self.fee_rate)
+		# StopLoss percent
+		slPercent = abs(stop - entry) / (self.close / 100)
+
+		# 	Quantity to sell, using 3% risk of total account balance
+		qty = (self.vars["start_bal"] / slPercent) / self.close
 
 		# 	Buy action
 		self.sell = qty, entry
