@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4f50c29d-e7df-4739-8226-58c067ddedc9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Strat17_InsideBar/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Strat2_Envelope/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Strat3_10EMA_ATR/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat15_CleanC_RSI/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat15_CleanC_RSI/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat1_VWMA/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat1_VWMA/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat1_VWMAREVERSED/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat1_VWMAREVERSED/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat2_EMACrossover_GIT/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat3_Donchian_GIT/__init__.py" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/Strat17_InsideBar/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +31,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Strat17_InsideBar" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Language Defaults" />
   </component>
   <component name="RecentsManager">
