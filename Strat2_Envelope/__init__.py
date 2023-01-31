@@ -125,6 +125,8 @@ class Strat2_Envelope(Strategy):
 		# 	TakeProfit setting
 		self.take_profit = qty, profit_target
 
+
+
 	# def update_position(self):
 	# 	c_close = self.candles[:, 2]
 	#
