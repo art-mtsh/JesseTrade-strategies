@@ -6,7 +6,7 @@ from jesse import utils
 Ідея стратегії:
 Стратегія слідування за трендом.
 Фільтр по 10 EMA.
-Вхід = прорив попереднього ATR Band
+Вхід = прорив екстремума попереднього ATR Band
 Стоп = трейлінг по протилежному ATR Band
 '''
 
@@ -19,18 +19,28 @@ class Strat3_10EMA_ATR(Strategy):
 	def __init__(self):
 		super().__init__()
 
-		# базова EMA1
-		self.vars["ema_basis"] = 100
-		# дельта EMA
-		self.vars["ema_delta"] = 100
+		# базова EMA1						# для фільтру 10ЕМА
+		self.vars["ema_basis"] = 100		# майже неважливо
+		# дельта EMA						# які значення надаються!
+		self.vars["ema_delta"] = 100		# бо основа фільтру - рендж ATR*MPL
+
+		# ATR								# на кількість трейдів впливає опосередковано
+		self.vars["atr_period"] = 200		# якісно краще брати число побільше, до 200
+
+		# ATR multiplier					# чим менше значення - тим менше трейдів допускає фільтр
+		self.vars["atr_mpl"] = 10			# оптимальне значення - 10
+
+		# ATR filter						# чим нижче - тим більше допускається трейдів
+		self.vars["atr_fil"] = 0.3			# але треба враховувати 0.1% сумарної комісії!
+
+		# Start BALANCE
+		self.vars["start_bal"] = 1000
+
 		# Risk/Reward
 		self.vars["RR"] = 1
-		# ATR
-		self.vars["atr_period"] = 100
-		# ATR multiplier
-		self.vars["atr_mpl"] = 3
-		# Start BALANCE
-		self.vars["start_bal"] = 100
+
+		# reverse? 1=no, 2=yes
+		self.vars["REVERSE"] = 1
 
 	# --- INDICATORS ---
 
@@ -81,53 +91,60 @@ class Strat3_10EMA_ATR(Strategy):
 	# --- FILTERS ---
 
 	# фільтр тренду по 10 EMA
-	def trendEma(self):
-		return self.ema10 > \
-			   self.ema9 > \
-			   self.ema8 > \
-			   self.ema7 > \
-			   self.ema6 > \
-			   self.ema5 > \
-			   self.ema4 > \
-			   self.ema3 > \
-			   self.ema2 > \
-			   self.ema1 or \
-			   self.ema10 < \
-			   self.ema9 < \
-			   self.ema8 < \
-			   self.ema7 < \
-			   self.ema6 < \
-			   self.ema5 < \
-			   self.ema4 < \
-			   self.ema3 < \
-			   self.ema2 < \
-			   self.ema1
-
-	def atrFilter(self):
-		return (self.vars["atr_mpl"] * self.atr0[-1]) / (self.close / 100) > 1
-
-	def filters(self):
-		return [self.trendEma, self.atrFilter]
+	# def trendEma(self):
+	# 	return self.ema10 > \
+	# 		   self.ema9 > \
+	# 		   self.ema8 > \
+	# 		   self.ema7 > \
+	# 		   self.ema6 > \
+	# 		   self.ema5 > \
+	# 		   self.ema4 > \
+	# 		   self.ema3 > \
+	# 		   self.ema2 > \
+	# 		   self.ema1 or \
+	# 		   self.ema10 < \
+	# 		   self.ema9 < \
+	# 		   self.ema8 < \
+	# 		   self.ema7 < \
+	# 		   self.ema6 < \
+	# 		   self.ema5 < \
+	# 		   self.ema4 < \
+	# 		   self.ema3 < \
+	# 		   self.ema2 < \
+	# 		   self.ema1
+	#
+	# def atrFilter(self):
+	# 	return (self.vars["atr_mpl"] * self.atr0[-1]) / (self.close / 100) > self.vars["atr_fil"]
+	#
+	# def filters(self):
+	# 	return [self.trendEma, self.atrFilter]
 
 	# --- ORDERS ---
 
 	def should_long(self) -> bool:
-		return self.low > self.ema1 > self. ema2
+		if self.vars["REVERSE"] == 1:
+			return self.low > self.ema1 > self. ema2
+		else:
+			return self.high < self.ema1 < self.ema2
 
 	def should_short(self) -> bool:
-		return self.high < self.ema1 < self. ema2
+		if self.vars["REVERSE"] == 1:
+			return self.high < self.ema1 < self. ema2
+		else:
+			return self.low > self.ema1 > self.ema2
 
 	def should_cancel_entry(self) -> bool:
 		return True
 
 	def go_long(self):
-		entry = self.close + self.vars["atr_mpl"] * self.atr0[-1]
-
-		# 	StopLoss = 2x ATR
-		stop = self.close - self.vars["atr_mpl"] * self.atr0[-1]
-
-		# 	TakeProfit = 5x ATR
-		profit_target = entry + self.vars["RR"] * abs(entry - stop)
+		if self.vars["REVERSE"] == 1:
+			entry = self.close + self.vars["atr_mpl"] * self.atr0[-1]
+			stop = self.close - self.vars["atr_mpl"] * self.atr0[-1]
+			profit_target = entry + self.vars["RR"] * abs(entry - stop)
+		else:
+			entry = self.close - self.vars["atr_mpl"] * self.atr0[-1]
+			profit_target = self.close + self.vars["atr_mpl"] * self.atr0[-1]
+			stop = entry - self.vars["RR"] * abs(entry - profit_target)
 
 		# StopLoss percent
 		slPercent = abs(stop - entry) / (self.close / 100)
@@ -145,13 +162,14 @@ class Strat3_10EMA_ATR(Strategy):
 		self.take_profit = qty, profit_target
 
 	def go_short(self):
-		entry = self.close - self.vars["atr_mpl"] * self.atr0[-1]
-
-		# 	StopLoss
-		stop = self.close + self.vars["atr_mpl"] * self.atr0[-1]
-
-		# 	TakeProfit
-		profit_target = entry - self.vars["RR"] * abs(entry - stop)
+		if self.vars["REVERSE"] == 1:
+			entry = self.close - self.vars["atr_mpl"] * self.atr0[-1]
+			stop = self.close + self.vars["atr_mpl"] * self.atr0[-1]
+			profit_target = entry - self.vars["RR"] * abs(entry - stop)
+		else:
+			entry = self.close + self.vars["atr_mpl"] * self.atr0[-1]
+			profit_target = self.close - self.vars["atr_mpl"] * self.atr0[-1]
+			stop = entry + self.vars["RR"] * abs(entry - profit_target)
 
 		# StopLoss percent
 		slPercent = abs(stop - entry) / (self.close / 100)
@@ -168,19 +186,19 @@ class Strat3_10EMA_ATR(Strategy):
 		# 	TakeProfit setting
 		self.take_profit = qty, profit_target
 
-	def update_position(self):
-		c_close = self.candles[:, 2]
-
-		qty = self.position.qty
-
-		if self.is_long and \
-			(c_close[-1] - self.vars["atr_mpl"] * self.atr0[-1]) >= \
-			(c_close[-2] - self.vars["atr_mpl"] * self.atr0[-2]):
-			self.stop_loss = qty, self.close - self.vars["atr_mpl"] * self.atr0[-1]
-		elif self.is_short and \
-			(c_close[-1] + self.vars["atr_mpl"] * self.atr0[-1]) <= \
-			(c_close[-2] + self.vars["atr_mpl"] * self.atr0[-2]):
-			self.stop_loss = qty, self.close + self.vars["atr_mpl"] * self.atr0[-1]
+	# def update_position(self):
+	# 	c_close = self.candles[:, 2]
+	#
+	# 	qty = self.position.qty
+	#
+	# 	if self.is_long and \
+	# 		(c_close[-1] - self.vars["atr_mpl"] * self.atr0[-1]) >= \
+	# 		(c_close[-2] - self.vars["atr_mpl"] * self.atr0[-2]):
+	# 		self.stop_loss = qty, self.close - self.vars["atr_mpl"] * self.atr0[-1]
+	# 	elif self.is_short and \
+	# 		(c_close[-1] + self.vars["atr_mpl"] * self.atr0[-1]) <= \
+	# 		(c_close[-2] + self.vars["atr_mpl"] * self.atr0[-2]):
+	# 		self.stop_loss = qty, self.close + self.vars["atr_mpl"] * self.atr0[-1]
 
 
 
