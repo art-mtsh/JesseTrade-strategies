@@ -2,6 +2,14 @@ from jesse.strategies import Strategy, cached
 import jesse.indicators as ta
 from jesse import utils
 
+'''
+Ідея стратегії в реакції на 10 ЕМА
+Покупка/продажа на 1ЕМА,
+Стоп на 10ЕМА
+Профіт на 1 RR
+
+'''
+
 
 class Strat4_10EMA_overRSI(Strategy):
 
