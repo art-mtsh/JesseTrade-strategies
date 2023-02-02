@@ -28,7 +28,7 @@ class Strat3_10EMA_ATR(Strategy):
 		self.vars["atr_period"] = 200		# якісно краще брати число побільше, до 200
 
 		# ATR multiplier					# чим менше значення - тим менше трейдів допускає фільтр
-		self.vars["atr_mpl"] = 10			# оптимальне значення - 10
+		self.vars["atr_mpl"] = 3			# оптимальне значення - 10
 
 		# ATR filter						# чим нижче - тим більше допускається трейдів
 		self.vars["atr_fil"] = 0.3			# але треба враховувати 0.1% сумарної комісії!
@@ -91,33 +91,33 @@ class Strat3_10EMA_ATR(Strategy):
 	# --- FILTERS ---
 
 	# фільтр тренду по 10 EMA
-	# def trendEma(self):
-	# 	return self.ema10 > \
-	# 		   self.ema9 > \
-	# 		   self.ema8 > \
-	# 		   self.ema7 > \
-	# 		   self.ema6 > \
-	# 		   self.ema5 > \
-	# 		   self.ema4 > \
-	# 		   self.ema3 > \
-	# 		   self.ema2 > \
-	# 		   self.ema1 or \
-	# 		   self.ema10 < \
-	# 		   self.ema9 < \
-	# 		   self.ema8 < \
-	# 		   self.ema7 < \
-	# 		   self.ema6 < \
-	# 		   self.ema5 < \
-	# 		   self.ema4 < \
-	# 		   self.ema3 < \
-	# 		   self.ema2 < \
-	# 		   self.ema1
-	#
-	# def atrFilter(self):
-	# 	return (self.vars["atr_mpl"] * self.atr0[-1]) / (self.close / 100) > self.vars["atr_fil"]
-	#
-	# def filters(self):
-	# 	return [self.trendEma, self.atrFilter]
+	def trendEma(self):
+		return self.ema10 > \
+			   self.ema9 > \
+			   self.ema8 > \
+			   self.ema7 > \
+			   self.ema6 > \
+			   self.ema5 > \
+			   self.ema4 > \
+			   self.ema3 > \
+			   self.ema2 > \
+			   self.ema1 or \
+			   self.ema10 < \
+			   self.ema9 < \
+			   self.ema8 < \
+			   self.ema7 < \
+			   self.ema6 < \
+			   self.ema5 < \
+			   self.ema4 < \
+			   self.ema3 < \
+			   self.ema2 < \
+			   self.ema1
+
+	def atrFilter(self):
+		return (self.vars["atr_mpl"] * self.atr0[-1]) / (self.close / 100) > self.vars["atr_fil"]
+
+	def filters(self):
+		return [self.trendEma, self.atrFilter]
 
 	# --- ORDERS ---
 
