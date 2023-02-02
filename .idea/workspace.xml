@@ -3,19 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4f50c29d-e7df-4739-8226-58c067ddedc9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat1_VWMA/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Strat1_VWMA_END/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat1_VWMA/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat1_VWMA_END/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat1_VWMA/img.png" beforeDir="false" afterPath="$PROJECT_DIR$/Strat1_VWMA_END/img.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat2_Envelope/1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Strat2_Envelope_END/1.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat2_Envelope/2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Strat2_Envelope_END/2.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat2_Envelope/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Strat2_Envelope_END/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat2_Envelope/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat2_Envelope_END/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat3_10EMA_ATR/1675357797608.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Strat3_10EMA_ATR_END/1675357797608.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat3_10EMA_ATR/1675358258208.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Strat3_10EMA_ATR_END/1675358258208.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat3_10EMA_ATR/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Strat3_10EMA_ATR_END/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat3_10EMA_ATR/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat3_10EMA_ATR_END/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat3_10EMA_ATR/kava1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Strat3_10EMA_ATR_END/kava1.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Strat3_10EMA_ATR/kava2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Strat3_10EMA_ATR_END/kava2.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Strat4_10EMA_overRSI/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat4_10EMA_overRSI/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

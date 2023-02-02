@@ -63,6 +63,12 @@ class Strat4_10EMA_overRSI(Strategy):
 		# Body/Range ratio %
 		self.vars["BR"] = 70
 
+		# Start BALANCE
+		self.vars["start_bal"] = 1000
+
+		# reverse? 1=no, 2=yes
+		self.vars["REVERSE"] = 1
+
 	# --- INDICATORS ---
 
 	@property
@@ -182,25 +188,35 @@ class Strat4_10EMA_overRSI(Strategy):
 	# --- ORDERS ---
 
 	def should_long(self) -> bool:
-		return self.ema1 < self. ema2 and abs(self.ema1 - self.ema10) > self.close * 0.01
+		if self.vars["REVERSE"] == 1:
+			return self.ema1 < self. ema2 and abs(self.ema1 - self.ema10) > self.close * 0.01
+		else:
+			return self.ema1 > self.ema2 and abs(self.ema1 - self.ema10) > self.close * 0.01
 
 	def should_short(self) -> bool:
-		return self.ema1 > self. ema2 and abs(self.ema1 - self.ema10) > self.close * 0.01
+		if self.vars["REVERSE"] == 1:
+			return self.ema1 > self. ema2 and abs(self.ema1 - self.ema10) > self.close * 0.01
+		else:
+			return self.ema1 < self.ema2 and abs(self.ema1 - self.ema10) > self.close * 0.01
 
 	def should_cancel_entry(self) -> bool:
 		return True
 
 	def go_long(self):
-		entry = self.ema1
+		if self.vars["REVERSE"] == 1:
+			entry = self.ema1
+			stop = entry - abs(self.ema1 - self.ema10)
+			profit_target = self.ema10
+		else:
+			entry = self.ema1
+			stop = self.ema10
+			profit_target = entry + abs(self.ema1 - self.ema10)
 
-		# 	StopLoss = 2x ATR
-		stop = entry - abs(self.ema1 - self.ema10)
+		# StopLoss percent
+		slPercent = abs(stop - entry) / (self.close / 100)
 
-		# 	TakeProfit = 5x ATR
-		profit_target = self.ema10
-
-		# 	Quantity to buy, using 3% risk of total account balance
-		qty = utils.risk_to_qty(self.balance, 5, entry, stop, 5, self.fee_rate)
+		# 	Quantity
+		qty = (self.vars["start_bal"] / slPercent) / self.close
 
 		# 	Buy action
 		self.buy = qty, entry
@@ -212,16 +228,20 @@ class Strat4_10EMA_overRSI(Strategy):
 		self.take_profit = qty, profit_target
 
 	def go_short(self):
-		entry = self.ema1
+		if self.vars["REVERSE"] == 1:
+			entry = self.ema1
+			stop = entry + abs(self.ema1 - self.ema10)
+			profit_target = self.ema10
+		else:
+			entry = self.ema1
+			stop = self.ema10
+			profit_target = entry - abs(self.ema1 - self.ema10)
 
-		# 	StopLoss = 2x ATR
-		stop = entry + abs(self.ema1 - self.ema10)
+		# StopLoss percent
+		slPercent = abs(stop - entry) / (self.close / 100)
 
-		# 	TakeProfit = 5x ATR
-		profit_target = self.ema10
-
-		# 	Quantity to buy, using 3% risk of total account balance
-		qty = utils.risk_to_qty(self.balance, 5, entry, stop, 5, self.fee_rate)
+		# 	Quantity
+		qty = (self.vars["start_bal"] / slPercent) / self.close
 
 		# 	Buy action
 		self.sell = qty, entry
