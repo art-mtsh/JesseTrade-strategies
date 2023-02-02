@@ -64,7 +64,7 @@ class Strat4_10EMA_overRSI(Strategy):
 		self.vars["BR"] = 70
 
 		# Start BALANCE
-		self.vars["start_bal"] = 1000
+		self.vars["start_bal"] = 5000
 
 		# reverse? 1=no, 2=yes
 		self.vars["REVERSE"] = 1
