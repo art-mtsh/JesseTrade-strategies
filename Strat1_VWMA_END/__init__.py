@@ -13,7 +13,7 @@ decision maker - RSI
 
 '''
 
-class Strat1_VWMA(Strategy):
+class Strat1_VWMA_END(Strategy):
 
 	# --- CUSTOM VARIABLES ---
 

@@ -10,7 +10,7 @@ from jesse import utils
 Стоп = трейлінг по протилежному ATR Band
 '''
 
-class Strat3_10EMA_ATR(Strategy):
+class Strat3_10EMA_ATR_END(Strategy):
 
 	# --- HYPERPARAMETERS
 

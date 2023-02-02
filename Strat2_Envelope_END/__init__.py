@@ -9,7 +9,7 @@ from jesse import utils
 Вихід по екстремумам
 '''
 
-class Strat2_Envelope(Strategy):
+class Strat2_Envelope_END(Strategy):
 
 	# --- HYPERPARAMETERS
 
