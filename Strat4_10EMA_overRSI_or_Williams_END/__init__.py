@@ -11,7 +11,7 @@ from jesse import utils
 '''
 
 
-class Strat4_10EMA_overRSI(Strategy):
+class Strat4_10EMA_overRSI_or_Williams_END(Strategy):
 
 	# --- HYPERPARAMETERS
 
