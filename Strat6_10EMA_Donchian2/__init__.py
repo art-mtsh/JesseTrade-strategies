@@ -2,7 +2,7 @@ from jesse.strategies import Strategy, cached
 import jesse.indicators as ta
 from jesse import utils
 
-class Strat8_10EMA_Donchian2(Strategy):
+class Strat6_10EMA_Donchian2(Strategy):
 	# def before(self):
 	# 	self.log("------START OF CANDLE------")
 
@@ -22,6 +22,8 @@ class Strat8_10EMA_Donchian2(Strategy):
 		self.vars["donchian_period"] = 100
 		self.vars["ema_min_volatility_distance"] = 0
 		self.vars["lookback_verifying"] = -30
+		# Start BALANCE
+		self.vars["start_bal"] = 1000
 
 	# --- INDICATORS ---
 
@@ -85,10 +87,7 @@ class Strat8_10EMA_Donchian2(Strategy):
 				and self.ema_2[-1] > self.ema_1[-1] > self.close:
 			return True
 
-
-
 	def should_short(self) -> bool:
-
 		d_lookback = self.vars["lookback_verifying"]
 		if list(self.donchian.upperband[-1:d_lookback:-1]).count(self.donchian.upperband[-1]) == len(
 				self.donchian.upperband[-1:d_lookback:-1]) \
@@ -108,8 +107,11 @@ class Strat8_10EMA_Donchian2(Strategy):
 		# 	TakeProfit = 5x ATR
 		profit_target = max(self.donchian.upperband[-1:d_lookback:-1])
 
-		# 	Quantity to buy, using 3% risk of total account balance
-		qty = utils.risk_to_qty(self.balance, 3, entry, stop, self.fee_rate)
+		# StopLoss percent
+		slPercent = abs(stop - entry) / (self.close / 100)
+
+		# 	Quantity
+		qty = (self.vars["start_bal"] / slPercent) / self.close
 
 		# 	Buy action
 		self.buy = qty, entry
@@ -130,8 +132,11 @@ class Strat8_10EMA_Donchian2(Strategy):
 		# 	TakeProfit = 5x ATR
 		profit_target = min(self.donchian.lowerband[-1:d_lookback:-1])
 
-		# 	Quantity to buy, using 3% risk of total account balance
-		qty = utils.risk_to_qty(self.balance, 3, entry, stop, self.fee_rate)
+		# StopLoss percent
+		slPercent = abs(stop - entry) / (self.close / 100)
+
+		# 	Quantity
+		qty = (self.vars["start_bal"] / slPercent) / self.close
 
 		# 	Buy action
 		self.sell = qty, entry

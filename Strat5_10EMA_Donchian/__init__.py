@@ -2,7 +2,7 @@ from jesse.strategies import Strategy, cached
 import jesse.indicators as ta
 from jesse import utils
 
-class Strat7_10EMA_Donchian(Strategy):
+class Strat5_10EMA_Donchian(Strategy):
 	# def before(self):
 	# 	self.log("------START OF CANDLE------")
 
@@ -13,6 +13,8 @@ class Strat7_10EMA_Donchian(Strategy):
 		self.vars["ema_min_volatility_distance"] = 0.5
 		self.vars["lookback_verifying"] = -10
 		self.vars["atr_multi"] = 1
+		# Start BALANCE
+		self.vars["start_bal"] = 100
 
 	# --- INDICATORS ---
 
@@ -97,8 +99,11 @@ class Strat7_10EMA_Donchian(Strategy):
 		# 	TakeProfit = 5x ATR
 		profit_target = entry + self.vars["atr_multi"] * ta.atr(self.candles)
 
-		# 	Quantity to buy, using 3% risk of total account balance
-		qty = utils.risk_to_qty(self.balance, 3, entry, stop, self.fee_rate)
+		# StopLoss percent
+		slPercent = abs(stop - entry) / (self.close / 100)
+
+		# 	Quantity
+		qty = (self.vars["start_bal"] / slPercent) / self.close
 
 		# 	Buy action
 		self.buy = qty, entry
@@ -119,8 +124,11 @@ class Strat7_10EMA_Donchian(Strategy):
 		# 	TakeProfit = 5x ATR
 		profit_target = entry - self.vars["atr_multi"] * ta.atr(self.candles)
 
-		# 	Quantity to buy, using 3% risk of total account balance
-		qty = utils.risk_to_qty(self.balance, 3, entry, stop, self.fee_rate)
+		# StopLoss percent
+		slPercent = abs(stop - entry) / (self.close / 100)
+
+		# 	Quantity
+		qty = (self.vars["start_bal"] / slPercent) / self.close
 
 		# 	Buy action
 		self.sell = qty, entry

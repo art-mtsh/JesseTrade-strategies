@@ -81,7 +81,7 @@ class Strat4_10EMA_overRSI_or_Williams_END(Strategy):
 		# Start BALANCE
 		self.vars["start_bal"] = 100
 		# Risk/Reward
-		self.vars["RR"] = 10
+		self.vars["RR"] = 0.5
 		# reverse? 1=no, 2=yes
 		self.vars["REVERSE"] = 1
 

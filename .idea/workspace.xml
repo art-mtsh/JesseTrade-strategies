@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4f50c29d-e7df-4739-8226-58c067ddedc9" name="Changes" comment="" />
+    <list default="true" id="4f50c29d-e7df-4739-8226-58c067ddedc9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Strat4_10EMA_overRSI_or_Williams_END/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat4_10EMA_overRSI_or_Williams_END/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Strat7_10EMA_Donchian/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Strat5_10EMA_Donchian/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Strat7_10EMA_Donchian/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat5_10EMA_Donchian/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Strat8_10EMA_Donchian2/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Strat6_10EMA_Donchian2/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Strat8_10EMA_Donchian2/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat6_10EMA_Donchian2/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Strat8_10EMA_Donchian2/res.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Strat6_10EMA_Donchian2/res.jpg" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
