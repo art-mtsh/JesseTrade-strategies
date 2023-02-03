@@ -51,29 +51,37 @@ class Strat4_10EMA_overRSI(Strategy):
 		super().__init__()
 
 		# базова EMA1
-		self.vars["ema_basis"] = 50
+		self.vars["ema_basis"] = 100
 		# дельта EMA
 		self.vars["ema_delta"] = 10
+
 		# період RSI
 		self.vars["rsi_period"] = 10
 		# RSI min
 		self.vars["rsi_min"] = 30
 		# RSI max
 		self.vars["rsi_max"] = 70
-		# Risk/Reward
-		self.vars["RR"] = 3
+
+		# Williams % range period
+		self.vars["w%r"] = 5
+		# Williams MAX
+		self.vars["w%r_max"] = -1
+		# Williams MIN
+		self.vars["w%r_min"] = -99
+
 		# Candles range quantity
-		self.vars["c_quant"] = 8
+		self.vars["c_quant"] = 4
 		# Last X candles min atr range open/close
-		self.vars["c_min_range"] = 0
+		self.vars["c_min_range"] = 0.5
 		# Last X candles max atr range open/close
-		self.vars["c_max_range"] = 1
+		self.vars["c_max_range"] = 3
 		# Body/Range ratio %
-		self.vars["BR"] = 70
+		self.vars["BR"] = 50
 
 		# Start BALANCE
-		self.vars["start_bal"] = 5000
-
+		self.vars["start_bal"] = 100
+		# Risk/Reward
+		self.vars["RR"] = 10
 		# reverse? 1=no, 2=yes
 		self.vars["REVERSE"] = 1
 
@@ -126,6 +134,10 @@ class Strat4_10EMA_overRSI(Strategy):
 	@property
 	def atr0(self):
 		return ta.atr(self.candles, 100, sequential=True)
+
+	@property
+	def wPr(self):
+		return ta.willr(self.candles, self.vars["w%r"], sequential=True)
 
 	# --- FILTERS ---
 
@@ -191,34 +203,47 @@ class Strat4_10EMA_overRSI(Strategy):
 		return True
 	# сума всіх фільтрів
 	def filters(self):
-		return [self.trendEma]
+		return [self.trendEma, self.atrRangeCand, self.avgBodRangRatio]
 
 	# --- ORDERS ---
 
 	def should_long(self) -> bool:
+		c_open = self.candles[:, 1]
+		c_close = self.candles[:, 2]
 		if self.vars["REVERSE"] == 1:
-			return self.ema1 < self. ema2 and abs(self.ema1 - self.ema10) > self.close * 0.01
+			return self.wPr[-1] < self.vars["w%r_min"] and \
+				    c_close[-1] < c_close[-2] < c_close[-3] < c_close[-4] and \
+					self.low > self.ema1 > self.ema2
 		else:
-			return self.ema1 > self.ema2 and abs(self.ema1 - self.ema10) > self.close * 0.01
+			return self.wPr[-1] < self.vars["w%r_min"] and \
+				    c_close[-1] < c_close[-2] < c_close[-3] < c_close[-4] and \
+					self.low > self.ema1 > self.ema2
+
 
 	def should_short(self) -> bool:
+		c_open = self.candles[:, 1]
+		c_close = self.candles[:, 2]
 		if self.vars["REVERSE"] == 1:
-			return self.ema1 > self. ema2 and abs(self.ema1 - self.ema10) > self.close * 0.01
+			return self.wPr[-1] > self.vars["w%r_max"] and \
+				   c_close[-1] > c_close[-2] > c_close[-3] > c_close[-4] and \
+				   self.high < self.ema1 < self.ema2
 		else:
-			return self.ema1 < self.ema2 and abs(self.ema1 - self.ema10) > self.close * 0.01
+			return self.wPr[-1] > self.vars["w%r_max"] and \
+				   c_close[-1] > c_close[-2] > c_close[-3] > c_close[-4] and \
+				   self.high < self.ema1 < self.ema2
 
 	def should_cancel_entry(self) -> bool:
 		return True
 
 	def go_long(self):
 		if self.vars["REVERSE"] == 1:
-			entry = self.ema1
-			stop = entry - abs(self.ema1 - self.ema10)
-			profit_target = self.ema10
+			entry = self.high + self.high * 0.0001
+			stop = self.low - 0.5 * self.atr0[-1]
+			profit_target = entry + abs(entry - stop) * self.vars["RR"]
 		else:
-			entry = self.ema1
-			stop = self.ema10
-			profit_target = entry + abs(self.ema1 - self.ema10)
+			entry = self.low - self.low * 0.0001
+			stop = self.low - self.low * 0.0001 - 0.5 * self.atr0[-1]
+			profit_target = entry + abs(entry - stop) * self.vars["RR"]
 
 		# StopLoss percent
 		slPercent = abs(stop - entry) / (self.close / 100)
@@ -237,13 +262,13 @@ class Strat4_10EMA_overRSI(Strategy):
 
 	def go_short(self):
 		if self.vars["REVERSE"] == 1:
-			entry = self.ema1
-			stop = entry + abs(self.ema1 - self.ema10)
-			profit_target = self.ema10
+			entry = self.low - self.low * 0.0001
+			stop = self.high + 0.5 * self.atr0[-1]
+			profit_target = entry - abs(entry - stop) * self.vars["RR"]
 		else:
-			entry = self.ema1
-			stop = self.ema10
-			profit_target = entry - abs(self.ema1 - self.ema10)
+			entry = self.high + self.high * 0.0001
+			stop = self.high + self.high * 0.0001 + 0.5 * self.atr0[-1]
+			profit_target = entry - abs(entry - stop) * self.vars["RR"]
 
 		# StopLoss percent
 		slPercent = abs(stop - entry) / (self.close / 100)
@@ -260,10 +285,5 @@ class Strat4_10EMA_overRSI(Strategy):
 		# 	TakeProfit setting
 		self.take_profit = qty, profit_target
 
-	# def after(self):
-	# 	self.log(f"Current RSI [-1] {ta.rsi(self.candles, period=14, source_type='close', sequential=False)}")
-	# 	self.log(f"Current 4 * self.atr0[-1]: {4 * self.atr0[-1]}")
-	#
-	# 	self.log(f"--- possible ENTRY: {self.close}")
-	# 	self.log(f"--- possible TOP: {self.high + 4 * self.atr0[-1]}")
-	# 	self.log(f"--- possible BOTTOM: {self.low - 4 * self.atr0[-1]}")
+	def after(self):
+		self.log(f"W%R is: {self.wPr[-1]}")
