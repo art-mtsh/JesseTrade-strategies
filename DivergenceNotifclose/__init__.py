@@ -6,7 +6,7 @@ from jesse import utils
 from datetime import datetime
 
 
-class DivergenceNotif(Strategy):
+class DivergenceNotifclose(Strategy):
 
 	def before(self):
 		ope = self.candles[:, 1]
@@ -69,11 +69,11 @@ class DivergenceNotif(Strategy):
 		atr_volatility = ta.atr(self.candles, 50, sequential=True) / (self.close / 100)
 
 		for i in range(2, cumDeltaPeriod - 5):
-			if cumDeltaValues[-i] < cumDeltaValues[-i - 1] < cumDeltaValues[-i - 2] > cumDeltaValues[-i - 3] > cumDeltaValues[-i - 4]:
-				if cumDeltaValues[-1] >= cumDeltaValues[-i - 2] and highPriceValues[-1] < highPriceValues[-i - 2] and atr_volatility[-1] > 0.2:
+			if cumDeltaValues[-i] < cumDeltaValues[-i - 1] > cumDeltaValues[-i - 2]:
+				if cumDeltaValues[-1] >= cumDeltaValues[-i - 1] and highPriceValues[-1] < highPriceValues[-i - 1] and atr_volatility[-1] > 0.2:
 					clean = 0
 					for b in range(2, i + 2):
-						if highPriceValues[-b] >= highPriceValues[-i - 2] or cumDeltaValues[-b] >= cumDeltaValues[-i - 2]:
+						if highPriceValues[-b] >= highPriceValues[-i - 1] or cumDeltaValues[-b] >= cumDeltaValues[-i - 1]:
 							clean += 1
 					if clean == 0:
 						self.log(f"BEARish divergence on {self.symbol}, with prev. volume {int(volume[-1])}")
@@ -82,11 +82,11 @@ class DivergenceNotif(Strategy):
 				break
 
 		for i in range(2, cumDeltaPeriod - 5):
-			if cumDeltaValues[-i] > cumDeltaValues[-i - 1] > cumDeltaValues[-i - 2] < cumDeltaValues[-i - 3] < cumDeltaValues[-i - 4]:
-				if cumDeltaValues[-1] <= cumDeltaValues[-i - 2] and lowPriceValues[-1] > lowPriceValues[-i - 2] and atr_volatility[-1] > 0.2:
+			if cumDeltaValues[-i] < cumDeltaValues[-i - 1] > cumDeltaValues[-i - 2]:
+				if cumDeltaValues[-1] <= cumDeltaValues[-i - 1] and lowPriceValues[-1] > lowPriceValues[-i - 1] and atr_volatility[-1] > 0.2:
 					clean = 0
 					for b in range(2, i + 2):
-						if lowPriceValues[-b] <= lowPriceValues[-i - 2] or cumDeltaValues[-b] <= cumDeltaValues[-i - 2]:
+						if lowPriceValues[-b] <= lowPriceValues[-i - 1] or cumDeltaValues[-b] <= cumDeltaValues[-i - 1]:
 							clean += 1
 					if clean == 0:
 						self.log(f"BULLish divergence on {self.symbol}, with prev. volume {int(volume[-1])}")
