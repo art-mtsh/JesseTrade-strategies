@@ -68,30 +68,30 @@ class DivergenceNotifclose(Strategy):
 
 		atr_volatility = ta.atr(self.candles, 50, sequential=True) / (self.close / 100)
 
-		for i in range(2, cumDeltaPeriod - 5):
+		for i in range(3, cumDeltaPeriod - 5):
 			if cumDeltaValues[-i] < cumDeltaValues[-i - 1] > cumDeltaValues[-i - 2]:
-				if cumDeltaValues[-1] >= cumDeltaValues[-i - 1] and highPriceValues[-1] < highPriceValues[-i - 1] and atr_volatility[-1] > 0.2:
+				if cumDeltaValues[-1] >= cumDeltaValues[-i - 1] and highPriceValues[-1] < highPriceValues[-i - 1]:
 					clean = 0
-					for b in range(2, i + 2):
+					for b in range(2, i + 1):
 						if highPriceValues[-b] >= highPriceValues[-i - 1] or cumDeltaValues[-b] >= cumDeltaValues[-i - 1]:
 							clean += 1
 					if clean == 0:
 						self.log(f"BEARish divergence on {self.symbol}, with prev. volume {int(volume[-1])}")
-						# self.log(f"CD fractal on volumes: {volPriceValues[-1]} >= {volPriceValues[-i-2]}")
-						# self.log(f"HIGHes on fractals: {highPriceValues[-1]} < {highPriceValues[-i-2]}")
+						self.log(f"CD fractal on volumes: {volPriceValues[-1]} >= {volPriceValues[-i-2]}")
+						self.log(f"HIGHes on fractals: {highPriceValues[-1]} < {highPriceValues[-i-2]}")
 				break
 
-		for i in range(2, cumDeltaPeriod - 5):
+		for i in range(3, cumDeltaPeriod - 5):
 			if cumDeltaValues[-i] < cumDeltaValues[-i - 1] > cumDeltaValues[-i - 2]:
-				if cumDeltaValues[-1] <= cumDeltaValues[-i - 1] and lowPriceValues[-1] > lowPriceValues[-i - 1] and atr_volatility[-1] > 0.2:
+				if cumDeltaValues[-1] <= cumDeltaValues[-i - 1] and lowPriceValues[-1] > lowPriceValues[-i - 1]:
 					clean = 0
-					for b in range(2, i + 2):
+					for b in range(2, i + 1):
 						if lowPriceValues[-b] <= lowPriceValues[-i - 1] or cumDeltaValues[-b] <= cumDeltaValues[-i - 1]:
 							clean += 1
 					if clean == 0:
 						self.log(f"BULLish divergence on {self.symbol}, with prev. volume {int(volume[-1])}")
-						# self.log(f"CD fractal on volumes: {volPriceValues[-1]} <= {volPriceValues[-i-2]}")
-						# self.log(f"HIGHes on fractals: {highPriceValues[-1]} > {highPriceValues[-i-2]}")
+						self.log(f"CD fractal on volumes: {volPriceValues[-1]} <= {volPriceValues[-i-2]}")
+						self.log(f"HIGHes on fractals: {highPriceValues[-1]} > {highPriceValues[-i-2]}")
 				break
 
 	@property
