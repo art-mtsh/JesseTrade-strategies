@@ -2,7 +2,7 @@ from jesse.strategies import Strategy, cached
 import jesse.indicators as ta
 from jesse import utils
 
-class Strat20_PinBar_10EMA(Strategy):
+class Strat20_PinBar_10EMA_END(Strategy):
 
 	# --- CUSTOM VARIABLES ---
 
