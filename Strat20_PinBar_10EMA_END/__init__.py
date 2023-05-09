@@ -2,7 +2,7 @@ from jesse.strategies import Strategy, cached
 import jesse.indicators as ta
 from jesse import utils
 
-class Strat20_PinBar_10EMA_END(Strategy):
+class Strat20_PinBar_10EMA(Strategy):
 
 	# --- CUSTOM VARIABLES ---
 
@@ -10,19 +10,19 @@ class Strat20_PinBar_10EMA_END(Strategy):
 		super().__init__()
 		self.vars["start_bal"] = 100
 		# 10EMA basis
-		self.vars["emabasis"] = 50
+		self.vars["emabasis"] = 10
 		# 10EMA delta
-		self.vars["emadelta"] = 50
+		self.vars["emadelta"] = 10
 		# Середній ATR останніх 10 барів в %
 		self.vars["atr10min"] = 0.1
 		# мінімальний рендж пін-бару
 		self.vars["taillong_min"] = 0.1
 		# максимальний рендж пін-бару
-		self.vars["taillong_max"] = 0.6
+		self.vars["taillong_max"] = 2.0
 		# тіло до хвоста у %
-		self.vars["br_ratio"] = 5
+		self.vars["br_ratio"] = 15
 		# наскільки близько до краю має бути тіло
-		self.vars["body_position"] = 6
+		self.vars["body_position"] = 7
 		# кімната зліва
 		self.vars["room"] = 1
 		# risk/reward ratio
@@ -85,7 +85,7 @@ class Strat20_PinBar_10EMA_END(Strategy):
 	# Порівняння об'єму поточного бару і попереднього
 	def volume_filter(self):
 		candles_volume = self.candles[:, 5]
-		return candles_volume[-1] >= 1 * candles_volume[-2]
+		return candles_volume[-1] >= 3 * candles_volume[-2]
 	# Сума усіх фільтрів
 	def filters(self):
 		return [self.ema10_filter, self.atr10_filter, self.taillongmin_filter, self.taillongmax_filter, self.brratio_filter, self.volume_filter]

@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4f50c29d-e7df-4739-8226-58c067ddedc9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Strat20_PinBar_10EMA/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat20_PinBar_10EMA_END/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Strat21_InsideBar_10EMA/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Strat20_PinBar_10EMA_END/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Strat20_PinBar_10EMA_END/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
