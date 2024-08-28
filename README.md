@@ -1,5 +1,7 @@
 # strategies
  
-Тут зберігаються усі стратегії, які були відтестовані, або знаходяться в розробці.
+All strategies listed here are for Jesse Trade bot. 
 
-Якщо стратегія протестована і заморожена - біля неї буде скрін з результатами тестування.
+All of them have been tested.
+
+If the strategy is tested and frozen, there will be a screenshot with test results next to it.
