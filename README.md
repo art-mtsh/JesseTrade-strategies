@@ -1,6 +1,7 @@
 # strategies
  
 All strategies listed here are for Jesse Trade bot. 
+https://github.com/jesse-ai/jesse.git
 
 All of them have been tested.
 
